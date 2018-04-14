@@ -7,15 +7,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Sistem Penilaian Kinerja Pegawai Negeri Sipil</title>
+    <title>Sistem Penilaian Kinerja Pegawai Negeri Sipil | Admin</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset_untuk_halaman_utama/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="shorcut icon" href="icon.ico">
 
     <!-- Custom styles for this template -->
-    <link href="asset/css/heroic-features.css" rel="stylesheet">
+    <link href="asset_untuk_halaman_utama/css/heroic-features.css" rel="stylesheet">
 
     <link href="../../../../dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -36,25 +36,25 @@
           </div>
 
           <div class="col-md-4">
-            <form class="form-signin" action="index.php" method="POST">
-              <div class="text-center mb-4">
-                <img class="mb-4" src="new_logo_jatim.png" alt="" height="100px" weight="100px">
-                <h1 class="h2 mb-2 font-weight-normal">Sistem Penilaian Kinerja</h1>
-                <p class="h4 mb-4 font-weight-normal">Login</p>
-              </div>
+          <form class="form-signin">
+          <div class="text-center mb-4">
+            <img class="mb-4" src="new_logo_jatim.png" alt="" height="100px" weight="100px">
+            <h1 class="h3 mb-3 font-weight-normal">Sistem Penilaian Kinerja</h1>
+            <p class="h4 mb-4 font-weight-normal">Login Admin</p>
+          </div>
 
-              <div class="form-label-group">
-                <input type="text" class="form-control" name="nip" placeholder="NIP" required autofocus maxlength="18">
-              </div>
-              <br>
-              <div class="form-label-group">
-                <input type="password" class="form-control" name="password" placeholder="Password" required minlength="8" maxlength="16">
-              </div>
-              <br>
-              <br>
-              <button class="btn btn-lg btn-primary btn-block" name="btnLogin" type="submit">Masuk</button>
-              <p class="mt-5 mb-3 text-muted text-center">&copy; Powered by Muhammad Sarwani 2018</p>
-            </form>
+          <div class="form-label-group">
+            <input type="text" id="inputEmail" class="form-control" placeholder="NIP" required autofocus maxlength="18">
+          </div>
+          <br>
+          <div class="form-label-group">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required minlength="8" maxlength="16">
+          </div>
+          <br>
+          <br>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Masuk</button>
+          <p class="mt-5 mb-3 text-muted text-center">&copy; Powered by Muhammad Sarwani 2018</p>
+          </form>
           </div>
 
           <div class="col-md-4">
