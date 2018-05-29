@@ -56,11 +56,8 @@
               <p class="mt-5 mb-3 text-muted text-center">&copy; Powered by Muhammad Sarwani 2018</p>
             </form>
           </div>
-
           <div class="col-md-4">
           </div>
-
-
         </div>
       </div>
     <!-- /.container -->
@@ -68,7 +65,50 @@
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
   </body>
 
+  <?php
+	    session_start();
+
+	    if(isset($_POST['btnLogin'])){
+
+		  include 'koneksi.php';
+
+		  $nip=$_POST['nip'];
+		  $password=$_POST['password'];
+		  $query="SELECT * FROM tabel_pegawai WHERE NIP='$nip' and PASSWORD='$password'";
+
+      if (!$result=$db->query($query)){
+			  die('sql salah [' . $db->error . ']');
+		  } else {
+		    if ($result->num_rows>0){
+				  $row=$result->fetch_assoc();
+          if($row['STATUS']=="Admin"){
+            $_SESSION['login_admin']=$row['NIP'];
+            $_SESSION['status_admin']=$row['STATUS'];
+            $_SESSION['nama_admin']=$row['NAMA'];
+            header("location:admin/index.php");
+          } else if($row['STATUS']=="Pegawai Yang Dinilai"){
+            $_SESSION['login_pegawai']=$row['NIP'];
+            $_SESSION['status_pegawai']=$row['STATUS'];
+            $_SESSION['nama_pegawai']=$row['NAMA'];
+            header("location:pegawai/index.php");
+          } else if($row['STATUS']=="Pejabat Penilai"){
+            $_SESSION['login_pejabat']=$row['NIP'];
+            $_SESSION['status_pejabat']=$row['STATUS'];
+            $_SESSION['nama_pejabat']=$row['NAMA'];
+            header("location:penilai/index.php");
+          }
+		    }
+      else {
+        echo'<script>
+          window.location.assign("index.php");
+          alert("User/password anda salah.");
+        </script>';
+		  }
+	  }
+
+	$db->close();
+	}
+?>
 </html>

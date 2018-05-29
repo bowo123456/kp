@@ -6,7 +6,7 @@
     $nama = $_POST['nama'];
     $jabatan = $_POST['jabatan'];
     $unit_kerja = $_POST['unit_kerja'];
-    
+
     $status = $_POST['status'];
 
     $sql = "INSERT INTO tabel_user (nip, nama, jabatan, unit_kerja, status)
@@ -16,7 +16,7 @@
         header("location: index.php");
     } else {
         echo "Error: " . $sql . "<br>" . $db->error;
-    }  
+    }
   }
 
   ?>
@@ -141,7 +141,7 @@ desired effect
     <section class="sidebar">
 
       <!-- Sidebar user panel (optional) -->
-      
+
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -161,7 +161,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Tambah Data Akun Pegawai
+        Tambah Data Pegawai
       </h1>
     </section>
 
@@ -226,7 +226,6 @@ desired effect
                     <option value="" >- Pilih Status -</option>
                     <option value="Pegawai Yang Dinilai" >Pegawai Yang Dinilai</option>
                     <option value="Pejabat Penilai" >Pejabat Penilai</option>
-                    <option value="Atasan Pejabat Penilai" >Atasan Pejabat Penilai</option>
                   </select>
                 </div>
                 <button type="submit" name="btn_simpan" class="btn btn-success">Simpan</button>

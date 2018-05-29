@@ -1,4 +1,4 @@
-<?php  
+<?php
 include "../koneksi.php";
 session_start();
 ?>
@@ -13,6 +13,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Kelola Data Admin | Admin</title>
+  <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="../asset_untuk_halaman_admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -67,8 +68,9 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- logo for regular state and mobile devices -->
+      <span class="logo-mini">KP</span>
       <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
 
@@ -84,27 +86,17 @@ desired effect
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+            <a class="" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><?php echo $_SESSION['nama']; ?></span>
+              <span class="hidden-xs fa fa-user"> <?php echo $_SESSION['status_admin']; ?> : <?php echo $_SESSION['nama_admin']; ?></span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- The user image in the menu -->
-              <li class="user-header">
-                <p>
-                  <span class="hidden-xs">Selamat datang, <?php echo $_SESSION['nama']; ?></span>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-right">
-                  <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
-                </div>
+
+          </li>
+
+        </ul>
+      </div>
               </li>
             </ul>
           </li>
@@ -119,7 +111,7 @@ desired effect
     <section class="sidebar">
 
       <!-- Sidebar user panel (optional) -->
-      
+
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -127,8 +119,11 @@ desired effect
         <!-- Optionally, you can add icons to the links -->
         <li class=""><a href="index.php"><i class="fa fa-link"></i> <span>Kelola Data Akun Pegawai</span></a></li>
         <li class=""><a href="keloladatapegawai.php"><i class="fa fa-link"></i> <span>Kelola Data Pegawai</span></a></li>
+        <li class=""><a href="kelolajabatan.php"><i class="fa fa-link"></i> <span>Kelola Relasi Pegawai</span></a></li>
         <li class="active"><a href="keloladataadmin.php"><i class="fa fa-link"></i> <span>Kelola Data Admin</span></a></li>
+        <li class=""><a href="logout.php"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       </ul>
+      <br><br><br><br><br>
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
@@ -148,47 +143,40 @@ desired effect
     <section class="content container-fluid">
       <div class="box">
 
-        <?php 
+                  <div class="box-body">
+        <?php
                 include "../koneksi.php";
-                $sql = "SELECT * FROM tabel_user WHERE status='Admin'";
+                $sql = "SELECT * FROM tabel_pegawai WHERE status='Admin'";
                 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                   while($row = $result->fetch_assoc()) {
 
               ?>
-                <tr role="row" class="odd">
-                  <div class="box-body">
-          <form role="form">
             <div class="form-group">
               <label >NIP</label>
-              <input type="text" class="form-control" name="nip" value="<?php echo $row['nip']; ?>" style="width: 20%;" disabled>
+              <input type="text" class="form-control" name="nip" value="<?php echo $row['NIP']; ?>" style="width: 20%;" disabled>
             </div>
             <div class="form-group">
               <label >Nama</label>
-              <input type="text" class="form-control" name="nama" value="<?php echo $row['nama']; ?>" style="width: 50%;" disabled>
+              <input type="text" class="form-control" name="nama" value="<?php echo $row['NAMA']; ?>" style="width: 40%;" disabled>
             </div>
             <div class="form-group">
-              <label >Jabatan</label>
-              <input type="text" class="form-control" name="nama" value="<?php echo $row['jabatan']; ?>" style="width: 40%;" disabled>
+              <label for="">Password</label>
+              <input type="text" class="form-control" name="password" value="<?php echo $row['PASSWORD']; ?>" style="width: 15%;" disabled>
             </div>
-            <div class="form-group">
-              <label>Unit Kerja</label>
-                <input type="text" class="form-control" name="unit_kerja" value="<?php echo $row['unit_kerja']; ?>" disabled style="width: 40%;">
-            </div>
-          </form>
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
-        <a href="ubahdataadmin.php?edit=<?php echo $row['nip']; ?>"  type="button" class="btn btn-primary">Ubah</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default"><i class="fa fa-edit"></i> Ubah</button>
+        <?php
+                      include ('formubahdataadmin.php');
+                    ?>
         </div>
-                <?php 
+                <?php
                   }
                 }
                 ?>
-    </form>
-
-            </div>
             <!-- /.box-body -->
           </div>
     </section>
@@ -203,10 +191,7 @@ desired effect
     <strong>Copyright &copy; 2018 <a href="#">Muhammad Sarwani</a>.</strong> All rights reserved.
   </footer>
   </aside>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-  immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
+
 </div>
 <!-- ./wrapper -->
 

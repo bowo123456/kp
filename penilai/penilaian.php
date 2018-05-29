@@ -1,37 +1,55 @@
 <?php
 include "../koneksi.php";
-  session_start();
+session_start();
 
-  if(isset($_GET['hapus'])){
-  $id=$_GET['hapus'];
-  $SQL = $db->prepare("UPDATE tabel_pegawai SET password=? WHERE nip=?");
-  $pass=null;
-  $SQL->bind_param("si",$pass,$id);
+if(isset($_POST['btn_simpan'])){
+  include '../koneksi.php';
 
-  $SQL->execute();
-  header("Location: index.php");
-  }
+    $ORIENTASI_PELAYANAN = $_POST['ORIENTASI_PELAYANAN'];
+    $INTEGRITAS = $_POST['INTEGRITAS'];
+    $KOMITMEN = $_POST['KOMITMEN'];
+    $DISIPLIN = $_POST['DISIPLIN'];
+    $KERJASAMA = $_POST['KERJASAMA'];
+    $KEPEMIMPINAN = $_POST['KEPEMIMPINAN'];
+    $NIP = $_POST['nip'];
 
-  if(isset($_POST['update'])){
+    $jumlah =$ORIENTASI_PELAYANAN+$INTEGRITAS+$KOMITMEN+$DISIPLIN+$KERJASAMA+$KEPEMIMPINAN;
+    $rata = $jumlah/6;
 
-    $SQL = $db->prepare("UPDATE tabel_pegawai SET password=? WHERE nip=?");
+    $sql = "INSERT INTO tabel_nilai_perilaku_kerja (ORIENTASI_PELAYANAN, INTEGRITAS, KOMITMEN, DISIPLIN, KERJASAMA, KEPEMIMPINAN, NIP, JUMLAH, NILAI_RATA_RATA)
+    VALUES ('$ORIENTASI_PELAYANAN','$INTEGRITAS','$KOMITMEN','$DISIPLIN','$KERJASAMA','$KEPEMIMPINAN','$NIP','$jumlah','$rata')";
 
-    $SQL->bind_param("si",$_POST['password'],$_POST['nip']);
+    if ($db->query($sql) === TRUE) {
+        header("location: penilaian.php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $db->error;
+    }
+}
+if(isset($_POST['btn_ubah'])){
+  include '../koneksi.php';
 
-    $SQL->execute();
-    // echo "hhh";
-    header("Location: index.php");
-  }
+    $ORIENTASI_PELAYANAN = $_POST['ORIENTASI_PELAYANAN'];
+    $INTEGRITAS = $_POST['INTEGRITAS'];
+    $KOMITMEN = $_POST['KOMITMEN'];
+    $DISIPLIN = $_POST['DISIPLIN'];
+    $KERJASAMA = $_POST['KERJASAMA'];
+    $KEPEMIMPINAN = $_POST['KEPEMIMPINAN'];
+    $NIP = $_POST['nip'];
 
-  if(isset($_POST['update2'])){
+    $jumlah =$ORIENTASI_PELAYANAN+$INTEGRITAS+$KOMITMEN+$DISIPLIN+$KERJASAMA+$KEPEMIMPINAN;
+    $rata = $jumlah/6;
 
-    $SQL = $db->prepare("UPDATE tabel_pegawai SET password=? WHERE nip=?");
+    $sql = "UPDATE tabel_nilai_perilaku_kerja SET ORIENTASI_PELAYANAN = $ORIENTASI_PELAYANAN, INTEGRITAS = $INTEGRITAS, KOMITMEN = $KOMITMEN,
+     DISIPLIN = $DISIPLIN, KERJASAMA = $KERJASAMA, KEPEMIMPINAN = $KEPEMIMPINAN, JUMLAH = $jumlah, NILAI_RATA_RATA = $rata
+     Where NIP = '$NIP'";
 
-    $SQL->bind_param("si",$_POST['password'],$_POST['nip']);
+    if ($db->query($sql) === TRUE) {
+        header("location: penilaian.php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $db->error;
+    }
+}
 
-    $SQL->execute();
-    header("Location: index.php");
-  }
 ?>
 
 <!DOCTYPE html>
@@ -43,8 +61,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Kelola Data Akun Pegawai</title>
-
+  <title>Data SKP Pegawai</title>
   <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -101,7 +118,7 @@ desired effect
 
     <!-- Logo -->
     <a href="index.php" class="logo">
-      <!-- logo for regular state and mobile devices -->
+      <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">KP</span>
       <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
@@ -122,7 +139,8 @@ desired effect
             <a class="" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs fa fa-user"> <?php echo $_SESSION['status_admin']; ?> : <?php echo $_SESSION['nama_admin']; ?></span>
+              <span class="hidden-xs fa fa-user">&nbsp;<?php
+              echo $_SESSION['status_pejabat']; ?> : <?php echo $_SESSION['nama_pejabat']; ?></span>
             </a>
 
           </li>
@@ -143,10 +161,8 @@ desired effect
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="index.php"><i class="fa fa-link"></i> <span>Kelola Data Akun Pegawai</span></a></li>
-        <li class=""><a href="keloladatapegawai.php"><i class="fa fa-link"></i> <span>Kelola Data Pegawai</span></a></li>
-        <li class=""><a href="kelolajabatan.php"><i class="fa fa-link"></i> <span>Kelola Relasi Pegawai</span></a></li>
-        <li class=""><a href="keloladataadmin.php"><i class="fa fa-link"></i> <span>Kelola Data Admin</span></a></li>
+        <li class=""><a href="index.php"><i class="fa fa-link"></i> <span>Data SKP Pegawai</span></a></li>
+        <li class="active"><a href="penilaian.php"><i class="fa fa-link"></i> <span>Penilaian Capaian Sasaran Kerja</span></a></li>
         <li class=""><a href="logout.php"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
@@ -159,7 +175,7 @@ desired effect
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Tabel Data Akun Pegawai
+        Tabel Penilaian Sasaran Kerja
       </h1>
     </section>
 
@@ -168,76 +184,27 @@ desired effect
     <section class="content container-fluid">
         <div class="box">
             <div class="box-header">
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fa fa-plus"></i> Tambah</button>
 
-              <div class="modal fade" id="modal-default">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Tambah Data Akun Pegawai</h4>
-                    </div>
-                    <div class="modal-body">
-
-                    <form action="" method="POST">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label >NIP</label>
-                            <select name="nip" class="form-control" style="width: 180%;">
-                              <option>- Pilih Pegawai -</option>
-                              <?php
-                                include "../koneksi.php";
-                                $sql = "SELECT * FROM tabel_pegawai WHERE status NOT LIKE 'Admin' and password is null";
-                                $result = $db->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                  while($row = $result->fetch_assoc()) {
-
-                              ?>
-                                <option value="<?php echo $row['NIP'];?>"><?php echo $row['NIP']."||".$row['NAMA'];?></option>
-                              <?php
-                                  }
-                                }?>
-
-                            </select>
-                          </div>
-
-                          <div class="form-group">
-                            <label >Password</label>
-                              <input type="password" name="password" class="form-control" placeholder="Password" minlength="8" maxlength="16">
-                          </div>
-                      </div>
-                    </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                      <button type="submit" class="btn btn-success pull-left" name="update" value="update" >Simpan</button>
-                    </div>
-                    </form>
-                  </div>
-                  <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-              </div>
-              <!-- /.modal -->
             </div>
             <!-- /.box-header -->
+
             <div class="box-body">
               <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="example1_length"></div></div><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"></div></div></div><div class="row"><div class="col-sm-12"><table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                 <thead>
                 <tr role="row">
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 182px;">NIP</th>
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 224px;">Nama</th>
-                  <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Password</th>
+                  <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 199px;">Jabatan</th>
+                  <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Unit Kerja</th>
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Aksi</th>
                 </thead>
                 <tbody>
 
               <?php
                 include "../koneksi.php";
-                $sql = "SELECT * FROM tabel_pegawai WHERE status NOT LIKE 'Admin' and password is not null";
+                $sql = "SELECT * FROM tabel_relasi_pegawai
+                JOIN tabel_pegawai
+                ON tabel_relasi_pegawai.id_pegawai=tabel_pegawai.NIP";
                 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -245,42 +212,75 @@ desired effect
 
               ?>
                 <tr role="row" class="odd">
-                  <td><?php echo $row['NIP']; ?></td>
-                  <td><?php echo $row['NAMA']; ?></td>
-                  <td><?php echo $row['PASSWORD']; ?></td>
+                  <td><?php echo $row['id_pegawai']; ?></td>
+                  <td><?php echo $row['nama_pegawai']; ?></td>
+                  <td><?php echo $row['JABATAN']; ?></td>
+                  <td><?php echo $row['UNIT_KERJA']; ?></td>
                   <td>
-                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['NIP']; ?>"><i class="fa fa-edit"></i>&nbsp;Ubah</button>
-                      <a href="index.php?hapus=<?php echo $row['NIP']?>"  type="button" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp;Hapus</a>
-
-                      <div class="modal fade" id="modal-default<?php echo $row['NIP']; ?>">
+                    <a href="detailpenilaian.php?id=<?php echo $row['id_pegawai']; ?>"  type="button" class="btn btn-default">Detail</a>
+                    <a href="cetak.php?id=<?php echo $row['id_pegawai']; ?>"  type="button" class="btn btn-success ">Cetak</a><br><br>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default"></i>&nbsp;Penilaian Prestasi Kerja</button>
+                  </td>
+                </tr>
+                  <?php
+                    $query = "SELECT * FROM tabel_nilai_perilaku_kerja where NIP = '".$row['id_pegawai'] ."'";
+                    $result = mysqli_query($db, $query);
+                    $row2 = mysqli_fetch_assoc($result);
+                  ?>
+                  <div class="modal fade" id="modal-default">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Ubah Data Akun Pegawai</h4>
+                    <h4 class="modal-title">Tambah Penilaian Prestasi Pegawai Negeri Sipil</h4>
                     </div>
-                    <div class="modal-body">
 
-                    <form action="index.php" method="POST">
-                    <input type="hidden" name="nip" value="<?php echo $row['NIP']?>"></input>
+                    <div class="modal-body">
+                    <form action="" method="POST">
+                      <input type="hidden" value="<?php echo $row['id_pegawai']; ?>" name="nip" />
                       <div class="row">
                         <div class="col-md-6">
-                          <div class="form-group">
-                            <label >NIP</label><br>
-                            <input type="text" name="nip" class="form-control" value="<?php echo $row['NIP']?>" disabled></input><br><br>
-                          </div>
+                        <div class="form-group">
+                          <label >Orientasi Pelayanan</label><br>
+                          <input type="number" class="form-control" required="" name="ORIENTASI_PELAYANAN" value="<?php echo $row2['ORIENTASI_PELAYANAN']; ?>" style="width: 40%;"><br>
+                        </div>
 
-                          <div class="form-group">
-                            <label >Password</label><br>
-                            <input type="password" name="password" class="form-control" placeholder="Password" minlength="8" maxlength="16"></input><br>
-                          </div>
-                      </div>
+                        <div class="form-group">
+                          <label >Integritas</label><br>
+                          <input type="number" class="form-control" required="" name="INTEGRITAS" value="<?php echo $row2['INTEGRITAS']; ?>" style="width: 40%;"><br>
+                        </div>
+
+                        <div class="form-group">
+                          <label >Komitmen</label><br>
+                          <input type="number" class="form-control" required="" name="KOMITMEN"  value="<?php echo $row2['KOMITMEN']; ?>"  style="width: 40%;"><br>
+                        </div>
+
+                        <div class="form-group">
+                          <label >Disiplin</label><br>
+                          <input type="number" class="form-control" required="" name="DISIPLIN"  value="<?php echo $row2['DISIPLIN']; ?>"  style="width: 40%;"><br>
+                        </div>
+
+                        <div class="form-group">
+                          <label >Kerjasama</label><br>
+                          <input type="number" class="form-control" required="" name="KERJASAMA"  value="<?php echo $row2['KERJASAMA']; ?>"  style="width: 40%;"><br>
+                        </div>
+
+                        <div class="form-group">
+                          <label >Kepemimpinan</label><br>
+                          <input type="number" class="form-control" required="" name="KEPEMIMPINAN"  value="<?php echo $row2['KEPEMIMPINAN']; ?>"  style="width: 40%;"><br>
+                        </div>
+                        </div>
                     </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                      <button type="submit" class="btn btn-success pull-left" name="update2" value="update" >Simpan</button>
+                      <?php if(!isset($row2['INTEGRITAS'])){ ?>
+                      <button type="submit" class="btn btn-primary pull-left" name="btn_simpan" >Simpan</button>
+                      <?php } else { ?>
+                      <button type="submit" class="btn btn-primary pull-left" name="btn_ubah" >Ubah</button>
+                      <?php } ?>
+                      <a href="cetakprestasi.php?id=<?php echo $row['id_pegawai']; ?>" type="button" class="btn btn-success pull-left" name="btn_cetak" >Cetak</a>
                     </div>
                     </form>
                   </div>
@@ -288,15 +288,11 @@ desired effect
                 </div>
                 <!-- /.modal-dialog -->
               </div>
-              <!-- /.modal -->
-
-
-                  </td>
-                </tr>
                 <?php
                   }
                 }
                 ?>
+
               </table></div></div><div class="row"><div class="col-sm-5"><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"></div></div></div></div>
             </div>
             <!-- /.box-body -->

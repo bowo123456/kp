@@ -1,17 +1,50 @@
-<?php  
+<?php
 include "../koneksi.php";
 session_start();
-  
+
+  if(isset($_GET['ajukan'])){
+    $id_user = $_SESSION['login_pegawai'];
+    $sql = "UPDATE tabel_target_skp set status='Diajukan' WHERE nip='$id_user'";
+
+      if ($db->query($sql) === TRUE) {
+        header("location: index.php");
+      }
+      else {
+        echo "Error deleting record: " . $db->error;
+      }
+  }
+
   if(isset($_GET['hapus'])){
   $id=$_GET['hapus'];
-  $sql = "DELETE FROM tabel_formulir_skp WHERE id_skp='$id'";
+  $sql = "DELETE FROM tabel_target_skp WHERE id_target='$id'";
 
     if ($db->query($sql) === TRUE) {
       header("location: index.php");
-    } 
+    }
     else {
       echo "Error deleting record: " . $db->error;
-    }    
+    }
+  }
+
+  if(isset($_POST['btn_simpan'])){
+    include '../koneksi.php';
+
+    $kegiatan_tugas_jabatan = $_POST['kegiatan_tugas_jabatan'];
+    $kuantitas = $_POST['kuantitas'];
+    $output = $_POST['output'];
+    $kualitas = $_POST['kualitas'];
+    $waktu = $_POST['waktu'];
+    $biaya = $_POST['biaya'];
+    $id_user = $_SESSION['login_pegawai'];
+
+    $sql = "INSERT INTO tabel_target_skp (kegiatan_tugas_jabatan, kuantitas, output, kualitas, waktu, biaya, nip, status)
+      VALUES ('$kegiatan_tugas_jabatan','$kuantitas','$output','$kualitas','$waktu','$biaya','$id_user','Pending')";
+
+    if ($db->query($sql) === TRUE) {
+        header("location: index.php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $db->error;
+    }
   }
 
 ?>
@@ -25,7 +58,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Starter</title>
+  <title>Kelola Sasaran Kerja Pegawai | Pegawai Yang Dinilai</title>
+  <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="../asset_untuk_halaman_admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -80,11 +114,10 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-mini">KP</span>
+      <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
 
     <!-- Header Navbar -->
@@ -99,30 +132,16 @@ desired effect
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+            <a class="" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><?php echo $_SESSION['nama']; ?></span>
+              <span class="hidden-xs fa fa-user">&nbsp;<?php
+              echo $_SESSION['status_pegawai']; ?> : <?php echo $_SESSION['nama_pegawai']; ?></span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- The user image in the menu -->
-              <li class="user-header">
-                <p>
-                  <span class="hidden-xs">Selamat datang, <?php echo $_SESSION['nama']; ?></span>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-right">
-                  <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
-                </div>
-              </li>
-            </ul>
+
           </li>
+
         </ul>
       </div>
     </nav>
@@ -139,8 +158,8 @@ desired effect
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="index.php"><i class="fa fa-link"></i> <span>Formulir SKP</span></a></li>
-        
+        <li class="active"><a href="index.php"><i class="fa fa-link"></i> <span>Kelola Sasaran Kerja Pegawai</span></a></li>
+        <li class=""><a href="logout.php"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
@@ -160,8 +179,65 @@ desired effect
     <section class="content container-fluid">
         <div class="box">
             <div class="box-header">
-                <a href="tambahkegiatantugasjabatan.php"  type="button" class="btn btn-success">Tambah Kegiatan Tugas Jabatan</a>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-default"><i class="fa fa-plus"></i>&nbsp;Tambah</button>
+              <a href="index.php?ajukan=oke" class="btn btn-primary" data-toggle="modal"><i class="fa fa-send"></i>&nbsp;Ajukan</a>
             </div>
+
+            <div class="modal fade" id="modal-default">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Tambah Target Sasaran Kerja Pegawai</h4>
+                    </div>
+                    <div class="modal-body">
+
+
+                    <form action="" method="POST">
+                      <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group">
+                          <label >Kegiatan Tugas Jabatan</label>
+                          <textarea class="form-control" rows="4" name="kegiatan_tugas_jabatan" placeholder="Masukkan kegiatan tugas jabatan" required="" ></textarea>
+                        </div>
+                        <div class="form-group">
+                          <label >Kuantitas</label>
+                          <input type="number" class="form-control" required="" name="kuantitas" style="width: 30%;">
+                        </div>
+                        <div class="form-group">
+                          <label >Output</label>
+                          <select name="output" class="form-control" style="width: 50%;">
+                            <option value="" >- Pilih Output -</option>
+                            <option value="Laporan" >Laporan</option>
+                            <option value="Dokumen" >Dokumen</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label >Kualitas</label>
+                          <input type="number" class="form-control" required="" name="kualitas" style="width: 30%;">
+                        </div>
+                        <div class="form-group">
+                          <label >Waktu (bulan)</label>
+                          <input type="number" required="" class="form-control" name="waktu" style="width: 30%;">
+                        </div>
+                        <div class="form-group">
+                          <label >Biaya</label>
+                          <input type="number" class="form-control" required="" name="biaya" style="width: 50%;">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                      <button type="submit" class="btn btn-success pull-left" name="btn_simpan" >Simpan</button>
+                    </div>
+                    </form>
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+              </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="example1_length"></div></div><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"></div></div></div><div class="row"><div class="col-sm-12"><table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
@@ -174,15 +250,16 @@ desired effect
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 75px;">Kualitas</th>
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 75px;">Waktu</th>
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 100px;">Biaya</th>
-                  <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 100px;">Status</th>
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Aksi</th>
                 </thead>
                 <tbody>
-     
+
               <?php
-                $no = 1; 
+                $no = 1;
                 include "../koneksi.php";
-                $sql = "SELECT * FROM tabel_formulir_skp";
+                $get_nip = $_SESSION['login_pegawai'];
+
+                $sql = "SELECT * FROM tabel_target_skp where NIP='$get_nip' and status not like 'Diajukan'";
                 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -191,21 +268,23 @@ desired effect
               ?>
                 <tr role="row" class="odd">
                   <td><?php echo $no++; ?>
-                    
+
                   </td>
-                  <td><?php echo $row['kegiatan_tugas_jabatan']; ?></td>
-                  <td><?php echo $row['kuantitas']; ?></td>
-                  <td><?php echo $row['output']; ?></td>
-                  <td><?php echo $row['kualitas']; ?></td>
-                  <td><?php echo $row['waktu']; ?></td>
-                  <td><?php echo $row['biaya']; ?></td>
-                  <td><?php echo $row['status']; ?></td>
+                  <td><?php echo $row['KEGIATAN_TUGAS_JABATAN']; ?></td>
+                  <td><?php echo $row['KUANTITAS']; ?></td>
+                  <td><?php echo $row['OUTPUT']; ?></td>
+                  <td><?php echo $row['KUALITAS']; ?></td>
+                  <td><?php echo $row['WAKTU']; ?></td>
+                  <td><?php echo $row['BIAYA']; ?></td>
                   <td>
-                      <a href="ubahkegiatantugasjabatan.php?edit=<?php echo $row['id_skp']; ?>"  type="button" class="btn btn-default">Ubah</a>
-                      <a href="index.php?hapus=<?php echo $row['id_skp']?>"  type="button" class="btn btn-danger">Hapus</a>
+                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default<?php echo $row['ID_TARGET']; ?>"><i class="fa fa-edit"></i>&nbsp;Ubah</button>
+                    <?php
+                      include ('formubahkegiatantugasjabatan.php');
+                    ?>
+                      <a href="index.php?hapus=<?php echo $row['ID_TARGET']?>" type="button" class="btn btn-danger"><i class="fa fa-trash-o">&nbsp;Hapus</i></a>
                   </td>
                 </tr>
-                <?php 
+                <?php
                   }
                 }
                 ?>
@@ -213,7 +292,7 @@ desired effect
               </table></div></div><div class="row"><div class="col-sm-5"><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"></div></div></div></div>
             </div>
             <!-- /.box-body -->
-            
+
           </div>
     </section>
     <!-- /.content -->

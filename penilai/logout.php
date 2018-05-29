@@ -1,5 +1,7 @@
-<?php  
+<?php
 	session_start();
-    session_destroy();
+    unset($_SESSION['login']);
+    unset($_SESSION['nama_pejabat']);
+    unset($_SESSION['status_pejabat']);
     header("location: /kp/ ");
 ?>

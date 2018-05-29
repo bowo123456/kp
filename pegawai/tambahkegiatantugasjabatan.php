@@ -3,7 +3,7 @@
 include '../koneksi.php';
       session_start();
       $id_user = $_SESSION['nip'];
-      
+
   if(isset($_POST['btn_simpan'])){
     include '../koneksi.php';
 
@@ -15,7 +15,7 @@ include '../koneksi.php';
       $biaya = $_POST['biaya'];
       $status = "Sudah Mengisi";
 
-      
+
       $sql = "INSERT INTO tabel_formulir_skp (kegiatan_tugas_jabatan, kuantitas, output, kualitas, waktu, biaya, status, id_user)
       VALUES ('$kegiatan_tugas_jabatan','$kuantitas','$output','$kualitas','$waktu','$biaya','$status','$id_user')";
 
@@ -23,7 +23,7 @@ include '../koneksi.php';
           header("location: index.php");
       } else {
           echo "Error: " . $sql . "<br>" . $db->error;
-      }  
+      }
   }
 
   ?>
@@ -113,7 +113,7 @@ desired effect
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><?php echo $_SESSION['nama']; ?></span>
+              <span class="hidden-xs"><?php echo $_SESSION['nama_pegawai']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
@@ -150,14 +150,14 @@ desired effect
     <section class="sidebar">
 
       <!-- Sidebar user panel (optional) -->
-      
+
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Formulir SKP</span></a></li>
-        
+
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
@@ -194,7 +194,7 @@ desired effect
                     <option value="Laporan" >Laporan</option>
                     <option value="Dokumen" >Dokumen</option>
                   </select>
-                </div> 
+                </div>
                 <div class="form-group">
                   <label >Kualitas</label>
                   <input type="number" class="form-control" required="" name="kualitas" style="width: 20%;">
@@ -207,7 +207,7 @@ desired effect
                   <label >Biaya</label>
                   <input type="number" class="form-control" required="" name="biaya" style="width: 50%;">
                 </div>
-                <button type="submit" name="btn_simpan" class="btn btn-success">Simpan</button>    
+                <button type="submit" name="btn_simpan" class="btn btn-success">Simpan</button>
               </div>
             </div>
           </form>

@@ -1,7 +1,7 @@
 <?php
   include '../koneksi.php';
   session_start();
-  $sql = mysqli_query($db,'SELECT nip FROM tabel_user WHERE status NOT LIKE "Admin" ');
+  $sql = mysqli_query($db,'SELECT nip FROM tabel_pegawai WHERE status NOT LIKE "Admin" ');
 
   if(isset($_POST['update'])){
 
@@ -84,7 +84,7 @@ desired effect
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
-    
+
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
       <!-- Sidebar toggle button-->
@@ -133,7 +133,7 @@ desired effect
     <section class="sidebar">
 
       <!-- Sidebar user panel (optional) -->
-      
+
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -164,7 +164,7 @@ desired effect
           <form action="" method="POST">
             <div class="row">
               <div class="col-md-6">
-                
+
                 <div class="form-group">
                   <label >NIP</label>
 
@@ -178,14 +178,14 @@ desired effect
 
                   </select>
 
-                  
+
                 </div>
 
                 <div class="form-group">
                   <label >Password</label>
                   <input type="password" name="password" class="form-control" placeholder="Password" style="width: 50%;">
                 </div>
-                <button type="submit" name="update" value="update" class="btn btn-success">Simpan</button>    
+                <button type="submit" name="update" value="update" class="btn btn-success">Simpan</button>
               </div>
             </div>
           </form>

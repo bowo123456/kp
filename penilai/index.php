@@ -1,4 +1,4 @@
-<?php  
+<?php
 include "../koneksi.php";
 session_start();
 ?>
@@ -12,7 +12,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Starter</title>
+  <title>Data SKP Pegawai</title>
+  <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="../asset_untuk_halaman_admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -67,11 +68,10 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-mini">KP</span>
+      <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
 
     <!-- Header Navbar -->
@@ -86,30 +86,16 @@ desired effect
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+            <a class="" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><?php echo $_SESSION['nama']; ?></span>
+              <span class="hidden-xs fa fa-user">&nbsp;<?php
+              echo $_SESSION['status_pejabat']; ?> : <?php echo $_SESSION['nama_pejabat']; ?></span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- The user image in the menu -->
-              <li class="user-header">
 
-                <p><?php echo $_SESSION['nama']; ?>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="logout.php" class="btn btn-default btn-flat"><i class="fa  fa-sign-out"></i> Sign out</a>
-                </div>
-              </li>
-            </ul>
           </li>
+
         </ul>
       </div>
     </nav>
@@ -127,7 +113,8 @@ desired effect
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="index.php"><i class="fa fa-link"></i> <span>Data SKP Pegawai</span></a></li>
-        
+        <li class=""><a href="penilaian.php"><i class="fa fa-link"></i> <span>Penilaian Capaian Sasaran Kerja</span></a></li>
+        <li class=""><a href="logout.php"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -148,7 +135,7 @@ desired effect
     <section class="content container-fluid">
         <div class="box">
             <div class="box-header">
-                
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -162,10 +149,12 @@ desired effect
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Aksi</th>
                 </thead>
                 <tbody>
-     
-              <?php 
+
+              <?php
                 include "../koneksi.php";
-                $sql = "SELECT * FROM tabel_user Where status='Pegawai Yang Dinilai'";
+                $sql = "SELECT * FROM tabel_relasi_pegawai
+                JOIN tabel_pegawai
+                ON tabel_relasi_pegawai.id_pegawai=tabel_pegawai.NIP";
                 $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -173,17 +162,16 @@ desired effect
 
               ?>
                 <tr role="row" class="odd">
-                  <td><?php echo $row['nip']; ?></td>
-                  <td><?php echo $row['nama']; ?></td>
-                  <td><?php echo $row['jabatan']; ?></td>
-                  <td><?php echo $row['unit_kerja']; ?></td>
+                  <td><?php echo $row['id_pegawai']; ?></td>
+                  <td><?php echo $row['nama_pegawai']; ?></td>
+                  <td><?php echo $row['JABATAN']; ?></td>
+                  <td><?php echo $row['UNIT_KERJA']; ?></td>
                   <td>
-                      <a href="detail.php?id=<?php echo $row['nip']; ?>"  type="button" class="btn btn-default">Detail</a>
-                      <a href="cetak.php?id=<?php echo $row['nip']; ?>"  type="button" class="btn btn-success ">Cetak</a>
-
+                      <a href="detail.php?id=<?php echo $row['id_pegawai']; ?>"  type="button" class="btn btn-default">Detail</a>
+                      <a href="cetakskp.php?id=<?php echo $row['id_pegawai']; ?>"  type="button" class="btn btn-success ">Cetak</a>
                   </td>
                 </tr>
-                <?php 
+                <?php
                   }
                 }
                 ?>

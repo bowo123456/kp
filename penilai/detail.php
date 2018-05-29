@@ -1,21 +1,6 @@
-<?php  
+<?php
 include "../koneksi.php";
 session_start();
-
-if(isset($_GET['konfirmasi'])){
-  include '../koneksi.php';
-    
-       $id=$_GET['konfirmasi']; 
-       $nip=$_GET['nip']; 
-      $sql = "UPDATE tabel_formulir_skp set status='Konfirmasi'  where id_skp=$id ";
-
-      if ($db->query($sql) === TRUE) {
-          header("location: detail.php?id=".$nip);
-      } else {
-          echo "Error: " . $sql . "<br>" . $db->error;
-      }  
-
-  }
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +12,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Starter</title>
+  <title>Detail SKP Pegawai</title>
+  <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="../asset_untuk_halaman_admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -82,11 +68,10 @@ desired effect
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-mini">KP</span>
+      <span class="logo-lg">DINKOMINFO JATIM</span>
     </a>
 
     <!-- Header Navbar -->
@@ -101,28 +86,13 @@ desired effect
           <!-- User Account Menu -->
           <li class="dropdown user user-menu">
             <!-- Menu Toggle Button -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+            <a class="" data-toggle="dropdown">
               <!-- The user image in the navbar-->
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs"><?php echo $_SESSION['nama']; ?></span>
+              <span class="hidden-xs fa fa-user">&nbsp;<?php
+              echo $_SESSION['status_pejabat']; ?> : <?php echo $_SESSION['nama_pejabat']; ?></span>
             </a>
-            <ul class="dropdown-menu">
-              <!-- The user image in the menu -->
-              <li class="user-header">
-
-                <span class="hidden-xs">Selamat datang, <?php echo $_SESSION['nama']; ?></span>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-right">
-                  <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
-                </div>
-              </li>
-            </ul>
           </li>
         </ul>
       </div>
@@ -130,7 +100,6 @@ desired effect
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
-
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
 
@@ -141,7 +110,8 @@ desired effect
         <li class="header">MENU</li>
         <!-- Optionally, you can add icons to the links -->
         <li class="active"><a href="index.php"><i class="fa fa-link"></i> <span>Data SKP Pegawai</span></a></li>
-        
+        <li class=""><a href="penilaian.php"><i class="fa fa-link"></i> <span>Penilaian Capaian Sasaran Kerja</span></a></li>
+        <li class=""><a href="logout.php"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
@@ -157,23 +127,25 @@ desired effect
     </section>
 
     <!-- Main content -->
-    <?php 
+    <?php
       $nip = $_GET['id'];
       include "../koneksi.php";
-      $sql = "SELECT * FROM tabel_user Where nip='$nip'";
+      $sql = "SELECT * FROM tabel_target_skp
+      JOIN tabel_pegawai
+      ON tabel_target_skp.NIP=tabel_pegawai.NIP";
       $result = $db->query($sql);
       $row = mysqli_fetch_assoc($result);
     ?>
     <section class="content container-fluid">
         <div class="box">
-            
+
             <!-- /.box-header -->
             <div class="box-header">
               <label >NIP</label>
-                  <input type="text" class="form-control" name="nip" value="<?php echo $row['nip']; ?>" style="width: 30%;" disabled>
+                  <input type="text" class="form-control" name="nip" value="<?php echo $row['NIP']; ?>" style="width: 30%;" disabled>
                   <br>
                   <label >Nama</label>
-                  <input type="text" class="form-control" name="nama" value="<?php echo $row['nama']; ?>" style="width: 30%;" disabled>
+                  <input type="text" class="form-control" name="nama" value="<?php echo $row['NAMA']; ?>" style="width: 30%;" disabled>
             </div>
 
             <!-- /.box-body -->
@@ -190,42 +162,40 @@ desired effect
                   <th tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 156px;">Aksi</th>
                 </thead>
                 <tbody>
-     
-              <?php
-                $no = 1; 
-                include "../koneksi.php";
-                $sql = "SELECT * FROM tabel_formulir_skp WHERE status NOT LIKE 'Konfirmasi'";
-                $result = $db->query($sql);
 
+              <?php
+                $no = 1;
+                include "../koneksi.php";
+                $sql = "SELECT * FROM tabel_target_skp
+                JOIN tabel_pegawai
+                ON tabel_target_skp.NIP=tabel_pegawai.NIP WHERE tabel_target_skp.STATUS like 'Diajukan' ";
+                $result = $db->query($sql);
 
                 if ($result->num_rows > 0) {
                   while($row = $result->fetch_assoc()) {
-
               ?>
                 <tr role="row" class="odd">
                   <td><?php echo $no++; ?></td>
-                  <td><?php echo $row['kegiatan_tugas_jabatan']; ?></td>
-                  <td><?php echo $row['kuantitas']; ?></td>
-                  <td><?php echo $row['output']; ?></td>
-                  <td><?php echo $row['kualitas']; ?></td>
-                  <td><?php echo $row['waktu']; ?></td>
-                  <td><?php echo $row['biaya']; ?></td>
+                  <td><?php echo $row['KEGIATAN_TUGAS_JABATAN']; ?></td>
+                  <td><?php echo $row['KUANTITAS']; ?></td>
+                  <td><?php echo $row['OUTPUT']; ?></td>
+                  <td><?php echo $row['KUALITAS']; ?></td>
+                  <td><?php echo $row['WAKTU']; ?></td>
+                  <td><?php echo $row['BIAYA']; ?></td>
 
                   <td>
-                    <a href="revisi.php?edit=<?php echo $row['id_skp']; ?>" type="button" class="btn btn-block btn-danger " style="width: 170px;"><i class="fa fa-pencil-square-o"></i>   Revisi</a>
-                    <a href="detail.php?konfirmasi=<?php 
-                    echo $row['id_skp'];
-                    ?>&nip=<?php echo $nip; ?>" type="button" class="btn btn-block btn-success " style="width: 170px;"><i class="fa fa-check-square-o"></i>   Konfirmasi</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-default<?php echo $row['ID_TARGET']; ?>"><i class="fa fa-edit"></i>&nbsp;Revisi</button>
+                    <?php
+                      include ('formrevisi.php');
+                    ?>
                   </td>
                 </tr>
-                <?php 
+                <?php
                   }
                 }
                 ?>
-
               </table></div></div><div class="row"><div class="col-sm-5"><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"></div></div></div></div>
             </div>
-
             <!-- /.box-body -->
           </div>
     </section>

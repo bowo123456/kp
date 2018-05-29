@@ -1,7 +1,7 @@
-<?php  
+<?php
 include "../koneksi.php";
 session_start();
-$nip_session = $_SESSION['nip'];
+$nip_session = $_SESSION['login_pejabat'];
 $nip_pegawai = $_GET['id'];
 ?>
 
@@ -14,7 +14,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Cetak SKP</title>
+  <title>Cetak Penilaian Sasaran Kerja</title>
+  <link rel="shorcut icon" href="../icon.ico">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" href="../asset_untuk_halaman_admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -53,173 +54,237 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<?php  
+<?php
 	include "../koneksi.php";
-	$result = $db->query("SELECT * FROM tabel_user WHERE nip='$nip_session'");
+	$result = $db->query("SELECT * FROM tabel_pegawai WHERE NIP='$nip_session'");
 	$row3 = mysqli_fetch_assoc($result);
 
-	$result2 = $db->query("SELECT * FROM tabel_user WHERE nip='$nip_pegawai'");
+	$result2 = $db->query("SELECT * FROM tabel_pegawai WHERE NIP='$nip_pegawai'");
 	$row2 = mysqli_fetch_assoc($result2);
 ?>
 <body class="hold-transition skin-blue sidebar-mini">
-	<h4><center>FORMULIR SASARAN KERJA<br>PEGAWAI NEGERI SIPIL</center></h4>
+	<h4><center>PENILAIAN CAPAIAN SASARAN KERJA<br>PEGAWAI NEGERI SIPIL</center></h4>
 	<br>
 	<div class="container">
+	<h5>Jangka Waktu Penilaian 2 Januari s/d 31 Desember <?php $tanggal=getdate(); echo $tanggal['year'];?></h5>
 	<table width="100%" border="1" cellspacing="10px" cellpadding="10px" style="text-align: center;" >
 		<tr>
-			<td>No.</td>
-			<td style="text-align: left;" colspan="2">&nbsp;I. PEJABAT PENILAI</td>
-			<td>No.</td>
-			<td style="text-align: left;" colspan="6">&nbsp;II. PEGAWAI NEGERI SIPIL YANG DINILAI</td>
-		</tr>
-		<tr>
-			<td>1.</td>
-			<td style="text-align: left;">&nbsp;Nama</td>
-			<td style="text-align: left;">&nbsp;<?php echo $row3['nama']; ?></td>
-			<td>1.</td>
-			<td style="text-align: left;">&nbsp;Nama</td>
-			<td style="text-align: left;" colspan="5">&nbsp;<?php echo $row2['nama']; ?></td>
-		</tr>
-		<tr>
-			<td>2.</td>
-			<td style="text-align: left;">&nbsp;NIP</td>
-			<td style="text-align: left;">&nbsp;<?php
-    			$tes = $row3['nip'];
-
-    			$pertama = substr($tes,0,8);
-    			$kedua = substr($tes,8,6);
-    			$tiga = substr($tes,14,1);
-    			$empat = substr($tes,14,3);
-
-    			$hasil=$pertama." ".$kedua." ".$tiga." ".$empat;;
-
-    			echo $hasil;
-				?></td>
-			<td>2.</td>
-			<td style="text-align: left;">&nbsp;NIP</td>
-			<td style="text-align: left;" colspan="5">&nbsp;<?php
-    			$tes = $row2['nip'];
-
-    			$pertama = substr($tes,0,8);
-    			$kedua = substr($tes,8,6);
-    			$tiga = substr($tes,14,1);
-    			$empat = substr($tes,14,3);
-
-    			$hasil=$pertama." ".$kedua." ".$tiga." ".$empat;;
-
-    			echo $hasil;
-				?></td>
-		</tr>
-		<tr>
-			<td>3.</td>
-			<td style="text-align: left;">&nbsp;Pangkat</td>
-			<td style="text-align: left;">&nbsp;<?php echo $row3['pangkat_golongan']; ?></td>
-			<td>3.</td>
-			<td style="text-align: left;">&nbsp;Pangkat</td>
-			<td style="text-align: left;" colspan="5">&nbsp;<?php echo $row2['pangkat_golongan']; ?></td>
-		</tr>
-		<tr>
-			<td>4.</td>
-			<td style="text-align: left;">&nbsp;Jabatan</td>
-			<td style="text-align: left;">&nbsp;<?php echo $row3['jabatan']; ?></td>
-			<td>4.</td>
-			<td style="text-align: left;">&nbsp;Jabatan</td>
-			<td style="text-align: left;" colspan="5">&nbsp;<?php echo $row2['jabatan']; ?></td>
-		</tr>
-		<tr>
-			<td>5.</td>
-			<td style="text-align: left;">&nbsp;Unit Kerja</td>
-			<td style="text-align: left;">&nbsp;DINAS KOMUNIKASI DAN INFORMATIKA</td>
-			<td>5.</td>
-			<td style="text-align: left;">&nbsp;Unit Kerja</td>
-			<td style="text-align: left;" colspan="5">&nbsp;DINAS KOMUNIKASI DAN INFORMATIKA</td>
-		</tr>
-		<tr>
 			<td rowspan="2" >No.</td>
-			<td style="text-align: center;" rowspan="2" colspan="2">&nbsp;III. KEGIATAN TUGAS JABATAN</td>
+			<td style="text-align: center;" rowspan="2" colspan="2">&nbsp;I. KEGIATAN TUGAS JABATAN</td>
 			<td rowspan="2" >AK</td>
-			<td colspan="6"><center>TARGET TAHUNAN</center></td>
+			<td colspan="6"><center>TARGET</center></td>
+			<td rowspan="2" >AK</td>
+			<td colspan="6"><center>Realisasi</center></td>
+			<td rowspan="2">PENGHITUNGAN</td>
+			<td rowspan="2">NILAI CAPAIAN SKP</td>
 		</tr>
 		<tr>
 			<td colspan="2">KUANT/OUTPUT</td>
 			<td>KUAL/MUTU</td>
 			<td colspan="2">WAKTU</td>
 			<td>BIAYA</td>
+			<td colspan="2">KUANT/OUTPUT</td>
+			<td>KUAL/MUTU</td>
+			<td colspan="2">WAKTU</td>
+			<td>BIAYA</td>
 		</tr>
-		<?php 
-                $sql = "SELECT * FROM tabel_formulir_skp";
+		<?php
+                $sql = "SELECT * FROM tabel_target_skp join tabel_nilai_realisasi_skp on tabel_target_skp.ID_TARGET = tabel_nilai_realisasi_skp.ID_TARGET   where NIP='$nip_pegawai'";
                 $result = $db->query($sql);
                 $nomor = 1;
 
+				$total=0;
                 if ($result->num_rows > 0) {
                   while($row = $result->fetch_assoc()) {
 
               ?>
 		<tr>
 			<td><?php echo $nomor++; ?>.</td>
-			<td style="text-align: left;" colspan="2">&nbsp;<?php echo $row["kegiatan_tugas_jabatan"]; ?></td>
+			<td style="text-align: left;" colspan="2">&nbsp;<?php echo $row["KEGIATAN_TUGAS_JABATAN"]; ?></td>
 			<td>0</td>
-			<td><?php echo $row["kuantitas"]; ?></td>
-			<td><?php echo $row["output"]; ?></td>
-			<td><?php echo $row["kualitas"]; ?></td>
-			<td><?php echo $row["waktu"]; ?></td>
+			<td><?php echo $row["KUANTITAS"]; ?></td>
+			<td><?php echo $row["OUTPUT"]; ?></td>
+			<td><?php echo $row["KUALITAS"]; ?></td>
+			<td><?php echo $row["WAKTU"]; ?></td>
 			<td>Bulan</td>
-			<td style="text-align: left;">&nbsp;Rp.&nbsp;<?php echo number_format($row["biaya"],2,',','.'); ?></td>
+			<td style="text-align: left;">&nbsp;Rp.&nbsp;<?php echo number_format($row["BIAYA"],2,',','.'); ?></td>
+
+			<td>0</td>
+			<td><?php echo $row["RKUANTITAS"]; ?></td>
+			<td><?php echo $row["OUTPUT"]; ?></td>
+			<td><?php echo $row["RKUALITAS"]; ?></td>
+			<td><?php echo $row["RWAKTU"]; ?></td>
+			<td>Bulan</td>
+			<td style="text-align: left;">&nbsp;Rp.&nbsp;<?php echo number_format($row["RBIAYA"],2,',','.'); ?></td>
+			<td><?php
+				// ((RKUANTITAS/KUANTITAS*100)+(RKUALITAS/KUALITAS*100)+(((1.76*WAKTU-RWAKTU)/WAKTU)*100)+(((1.76*BIAYA-RBIAYA)/BIAYA)*100))
+				$perhitungan = ($row['RKUANTITAS']/$row['KUANTITAS']*100)+($row['RKUALITAS']/$row['KUALITAS']*100)+
+				(((1.76*$row['WAKTU']-$row['RWAKTU'])/$row['WAKTU'])*100)+(((1.76*$row['BIAYA']-$row['RBIAYA'])/$row['BIAYA'])*100);
+				echo $perhitungan;
+			?></td>
+
+			<td>
+			<?php
+				$nilai_capaian = $perhitungan/4;
+				$total+=$nilai_capaian;
+				echo $nilai_capaian;
+			?>
+			</td>
+
 		</tr>
-		<?php 
+
+		<?php
 		}
 	}
 		 ?>
+
+
+		<tr>
+			<td></td>
+			<td colspan="2">II. TUGAS TAMBAHAN DAN KREATIVITAS/UNSUR PENUNJANG</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="text-align: left;"></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td style="text-align: left;"></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+
+		<?php
+            $sql = "SELECT * FROM tabel_tugas_tambahan where nip='$nip_pegawai'";
+            $result = $db->query($sql);
+            $nomor = 1;
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+
+            ?>
+		<tr>
+			<td><?php echo $nomor++; ?>.</td>
+			<td colspan="2"><?php echo $row['nama_tugas_tambahan']; ?></td>
+			<td></td>
+			<td colspan="2"><?php if($row['nama_tugas_tambahan'] == "Kreativitas") { echo "";} else{echo $row['nilai_tugas_tambahan'];}  ?></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><?php
+			$n = $row['nilai_tugas_tambahan'];
+			$m = $row['nama_tugas_tambahan'];
+
+			if($m == "Kreativitas"){
+				if($n == 3){
+					echo 3;
+					$total=$total+3;
+				} else if ($n == 6){
+					echo 6;
+					$total=$total+6;
+				} else if ($n == 12){
+					echo 12;
+					$total=$total+12;
+				}
+			} else{
+				if($n==0){
+					echo 0;
+					$total=$total+0;
+				} else if($n<=3 && $n>=1){
+					echo 1;
+					$total=$total+1;
+				} else if($n<=6 && $n>=4){
+					echo 2;
+					$total=$total+2;
+				} else if($n>=7){
+					echo 3;
+					$total=$total+3;
+				}
+			}
+			?></td>
+
+		</tr>
+		<?php
+		}
+	}
+		 ?>
+		<tr>
+			<td rowspan="2" colspan="18">Nilai Capaian SKP</td>
+			<td><?php echo  $total; ?></td>
+		</tr>
+		<tr>
+			<td><?php
+				// =IF(R24<=50,"(Buruk)",IF(R24<=60,"(Sedang)",IF(R24<=75,"(Cukup)",IF(R24<=90.99,"(Baik)","(Sangat Baik)"))))
+
+				if($total<=50){
+					echo "Buruk";
+				} else if($n<=60 && $n>=50){
+					echo "Sedang";
+				} else if($n<=75 && $n>=60){
+					echo "Cukup";
+				} else if($n<=90.99 && $n>=75){
+					echo "Baik";
+				} else{
+					echo "Sangat Baik";
+				}
+
+
+			?></td>
+		</tr>
+
 	</table>
 
 	<table width="100%" style="text-align: center;" >
 		<br>
 		<br>
-		<br>	
+		<br>
 		<tr>
 			<td width="50%"><br>
 				<br>
-				<br>
 			</td>
-			<td width="50%" colspan="3"><center>Surabaya, Januari <?php echo date("Y");?></center>
-			</td>
-		</tr>
-		<tr>
-			<td><center>Pejabat Penilai</center>
-				<br>
-				<br>
-				<br>
-				<br>
-			</td>
-			<td colspan="3"><center>Pegawai Negeri Sipil Yang Dinilai</center>
-				<br>
-				<br>
-				<br>
-				<br>
+			<td width="50%" colspan="3"><center>Surabaya, Desember <?php echo date("Y");?></center>
 			</td>
 		</tr>
 		<tr>
-			<td><center><u><?php echo $row3['nama']; ?></u></center></td>
-			<td colspan="3"><center><u><?php echo $row2['nama']; ?></u></center></td>
+			<td><center></center>
+				<br>
+				<br>
+				<br>
+				<br>
+			</td>
+			<td colspan="3"><center>Pejabat Penilai</center>
+				<br>
+				<br>
+				<br>
+				<br>
+			</td>
 		</tr>
 		<tr>
+			<td colspan="3"><center></center></td>
+			<td><center><u><?php echo $row3['NAMA']; ?></u></center></td>
+		</tr>
+		<tr>
+			<td colspan="3"><center>
+
+			</center></td>
 			<td><center>
 				<?php
-    			$tes = $row3['nip'];
-
-    			$pertama = substr($tes,0,8);
-    			$kedua = substr($tes,8,6);
-    			$tiga = substr($tes,14,1);
-    			$empat = substr($tes,14,3);
-
-    			$hasil=$pertama." ".$kedua." ".$tiga." ".$empat;;
-
-    			echo $hasil;
-				?>
-			</center></td>
-			<td colspan="3"><center>
-				<?php
-    			$tes = $row2['nip'];
+    			$tes = $row3['NIP'];
 
     			$pertama = substr($tes,0,8);
     			$kedua = substr($tes,8,6);
@@ -239,11 +304,9 @@ desired effect
 	<br>
 	<br>
 	<br>
-	<!-- <script type="text/javascript">
+	<script type="text/javascript">
 		window.print();
-	</script> -->
-
-
+	</script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->

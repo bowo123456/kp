@@ -4,7 +4,7 @@
 	<title>Halaman Masuk Pegawai</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/bootstrap/css/bootstrap.min.css">
@@ -14,25 +14,25 @@
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/fonts/iconic/css/material-design-iconic-font.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/animate/animate.css">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/css-hamburgers/hamburgers.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/animsition/css/animsition.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/select2/select2.min.css">
-<!--===============================================================================================-->	
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/css/util.css">
 	<link rel="stylesheet" type="text/css" href="../asset_untuk_login/css/main.css">
 <!--===============================================================================================-->
 </head>
-<?php  
+<?php
 	if(isset($_POST['btnLogin'])) {
     $nip =$_POST["nip"];
     $password =$_POST["password"];
     include '../koneksi.php';
-    $result = mysqli_query($db,"SELECT * FROM tabel_user WHERE nip = '$nip' and password = '$password' and status = 'Pegawai Yang Dinilai' ") ;
+    $result = mysqli_query($db,"SELECT * FROM tabel_user WHERE nip = '$nip' and password = '$password' and status not like 'Admin' ") ;
     $no_of_rows = mysqli_num_rows($result);
     if ($no_of_rows > 0) {
 
@@ -40,8 +40,9 @@
 
       session_start();
 
-      $_SESSION['nip']=$result['nip'];
-      $_SESSION['nama']=$result['nama'];
+      $_SESSION['nip_pegawai']=$result['nip'];
+      $_SESSION['nama_pegawai']=$result['nama'];
+      $_SESSION['status_pegawai']=$result['status'];
 
       echo "<SCRIPT type='text/javascript'> //not showing me this
       alert('Berhasil Login');
@@ -50,14 +51,14 @@
 
     } else {
     	 echo "<SCRIPT type='text/javascript'> //not showing me this
-      alert('Gagal Login'); 
+      alert('Gagal Login');
       </SCRIPT>";
 
     }
 }
 ?>
 <body>
-	
+
 	<div class="container-login100" style="background-image: url('images/123123.jpg');">
 		<div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
 			<form class="login100-form validate-form" action="login.php" method="POST">
@@ -83,7 +84,7 @@
 			</form>
 		</div>
 	</div>
-	
+
 <!--===============================================================================================-->
 	<script src="../asset_untuk_login/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
